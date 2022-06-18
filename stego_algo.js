@@ -102,7 +102,88 @@ function unhide_switch() {
 }
 
 // CHO = 86 - 167
+if (window.location.hash == '#unhide')
+    unhide_switch();
 
+var changed = true;
+
+$('#downloadbutton').prop('disabled', true);
+$('#downloadbutton2').prop('disabled', true);
+
+$('#downloadbutton').click(function(e) {
+    if (!loaded_img["cover"] || !loaded_img["secret"]) {
+        return;
+    }
+
+    $('#fullimgmodal').modal('show');
+
+    if(!changed)
+        return;
+
+    $('#viewimg').hide();
+
+    $('#loadingspan').text("Processing...");
+    setTimeout(function() {
+        var cover = document.createElement('canvas');
+        var secret = document.createElement('canvas');
+
+        cover.width = loaded_img["cover"].width;
+        cover.height = loaded_img["cover"].height;
+        secret.width = loaded_img["secret"].width;
+        secret.height = loaded_img["secret"].height;
+
+        var coverctx = cover.getContext('2d');
+        var secretctx = secret.getContext('2d');
+
+        coverctx.clearRect(0, 0, cover.width, cover.height);
+        coverctx.drawImage(loaded_img["cover"], 0, 0);
+        secretctx.clearRect(0, 0, secret.width, secret.height);
+        secretctx.drawImage(loaded_img["secret"], 0, 0);
+
+        var coverdata = coverctx.getImageData(0, 0, cover.width, cover.height);
+        var secretdata = secretctx.getImageData(0, 0, secret.width, secret.height);
+        doHideImage(coverdata, secretdata, $('#bits').slider('value'));
+
+        $('#loadingspan').text("Displaying...");
+        setTimeout(function() {
+            coverctx.putImageData(coverdata, 0, 0);
+            changed = false;
+
+            $('#viewimg').attr('src', cover.toDataURL());
+            $('#viewimg').show();
+
+            $('#loadingspan').html("Right click and save the image.<br>Use the 'Unhide image' tool to retrieve the hidden image.");
+        }, 20);
+    }, 20);
+});
+
+$('#downloadbutton2').click(function(e) {
+    if (!loaded_img["stegimage"]) {
+        return;
+    }
+
+    $('#fullimgmodal').modal('show');
+
+    if(!changed)
+        return;
+
+    $('#viewimg').hide();
+
+    $('#loadingspan').text("Displaying...");
+    setTimeout(function() {
+        changed = false;
+
+        $('#viewimg').attr('src', stegdataurl);
+        $('#viewimg').show();
+
+        $('#loadingspan').text("Right click and save the image.");
+    }, 20);
+});
+
+function downloadCanvas(link, canvas, filename) {
+    link.href = canvas.toDataURL();
+    link.download=filename;
+}
 
 // DARREN = 169 - 255
 
