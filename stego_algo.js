@@ -186,7 +186,93 @@ function downloadCanvas(link, canvas, filename) {
 }
 
 // DARREN = 169 - 255
+var factor = {
+    "cover": 0.001,
+    "secret": 0.001,
+};
+var k = 0.001;
+var opposite = {
+    "cover": "secret",
+    "secret": "cover",
+};
 
+var loaded_img = {
+    "cover": undefined,
+    "secret": undefined,
+    "stegimage": undefined,
+};
+
+var stegdataurl;
+
+function drawImagePreview(which, recursed) {
+    var id = '#' + which + 'canvas';
+
+    var ctx = $(id)[0].getContext('2d');
+
+    var targetw = $(id)[0].width;
+    var targeth = $(id)[0].height;
+
+    var img = loaded_img[which];
+    var imgw = img.width;
+    var imgh = img.height;
+    var wfactor = img.width / targetw;
+    var hfactor = img.height / targeth;
+    factor[which] = wfactor;
+    if (hfactor > factor[which])
+        factor[which] = hfactor;
+
+    k = factor[which];
+    if (factor[opposite[which]] > factor[which])
+        k = factor[opposite[which]];
+
+    // draw the image to the canvas
+    ctx.clearRect(0, 0, targetw, targeth);
+    ctx.drawImage(img, 0, 0, imgw / k, imgh / k);
+
+    if (loaded_img[opposite[which]]) {
+        if (!recursed) {
+            drawImagePreview(opposite[which], 1);
+        } else {
+            makeHideImagePreview($('#bits').slider('value'));
+        }
+    }
+}
+
+function drawUnhideImagePreview() {
+    var ctx = $('#stegcanvas')[0].getContext('2d');
+
+    var imgw = loaded_img["stegimage"].width;
+    var imgh = loaded_img["stegimage"].height;
+
+    var k = imgw / 300;
+    if ((imgh / 300) > k)
+        k = imgh / 300;
+
+    ctx.clearRect(0, 0, 300, 300);
+    ctx.drawImage(loaded_img["stegimage"], 0, 0, imgw / k, imgh / k);
+
+    makeUnhideImagePreview();
+}
+
+function makeHideImagePreview(bits) {
+    $('#downloadbutton').prop('disabled', false);
+    var ctx = $('#outputcanvas')[0].getContext('2d');
+    ctx.clearRect(0, 0, 300, 300);
+    ctx.font = '15px sans-serif';
+    ctx.fillText("Processing...", 10, 30);
+
+    setTimeout(function() {
+        var coverctx = $('#covercanvas')[0].getContext('2d');
+        var coverdata = coverctx.getImageData(0, 0, loaded_img["cover"].width/k, loaded_img["cover"].height/k);
+        var secretctx = $('#secretcanvas')[0].getContext('2d');
+        var secretdata = secretctx.getImageData(0, 0, loaded_img["secret"].width/k, loaded_img["secret"].height/k);
+
+        doHideImage(coverdata, secretdata, bits);
+
+        ctx.clearRect(0, 0, 300, 300);
+        ctx.putImageData(coverdata, 0, 0);
+    }, 20);
+}
 
 // JOSHUA = 257 - 383
 
