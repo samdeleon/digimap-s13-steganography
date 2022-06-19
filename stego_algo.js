@@ -276,4 +276,132 @@ function makeHideImagePreview(bits) {
 
 // JOSHUA = 257 - 383
 
+function makeUnhideImagePreview() {
+    $('#downloadbutton2').prop('disabled', false);
+    var ctx = $('#hiddencanvas')[0].getContext('2d');
+    ctx.clearRect(0, 0, 300, 300);
+    ctx.font = '15px sans-serif';
+    ctx.fillText("Processing...", 10, 30);
+
+    setTimeout(function() {
+        var steg = document.createElement('canvas');
+
+        var imgw = loaded_img["stegimage"].width;
+        var imgh = loaded_img["stegimage"].height;
+
+        steg.width = imgw;
+        steg.height = imgh;
+        var stegctx = steg.getContext('2d');
+        stegctx.drawImage(loaded_img["stegimage"], 0, 0, imgw, imgh);
+        var stegdata = stegctx.getImageData(0, 0, imgw, imgh);
+
+        // make a full size canvas and unhide image on it, then scale that down for display
+        // cache the result so that it can be downloaded quicker
+
+        doUnhideImage(stegdata, $('#bits2').slider('value'));
+
+        var k = imgw / 300;
+        if ((imgh / 300) > k)
+            k = imgh / 300;
+
+        var img = new Image();
+        img.onload = function() {
+            ctx.clearRect(0, 0, 300, 300);
+            ctx.drawImage(img, 0, 0, imgw / k, imgh / k);
+        }
+        stegctx.putImageData(stegdata, 0, 0);
+        stegdataurl = steg.toDataURL();
+        img.src = stegdataurl;
+    }, 20);
+}
+
+function loadImage(which, cb) {
+    var input = $('#' + which)[0];
+
+    loaded_img[which] = undefined;
+
+    var img = new Image;
+    img.onload = function() {
+        loaded_img[which] = img;
+        cb(which);
+    }
+    img.src = URL.createObjectURL(input.files[0]);
+}
+
+function loadPresetImage(which, cb) {
+    loaded_img[which] = undefined;
+
+    var img = new Image;
+    img.onload = function() {
+        loaded_img[which] = img;
+        cb(which);
+    }
+    img.src = $('#'+which+'-preset').val() + '.png';
+}
+
+function hideImage() {
+    loadImage('cover', drawImagePreview);
+    loadImage('secret', drawImagePreview);
+}
+
+// hides secretdata into coverdata
+function doHideImage(coverdata, secretdata, bits) {
+    var coverpix = coverdata.data;
+    var secretpix = secretdata.data;
+
+    var minw = coverdata.width;
+    var minh = coverdata.height;
+    if (secretdata.width < minw)
+        minw = secretdata.width;
+    if (secretdata.height < minh)
+        minh = secretdata.height;
+
+    var mask = (0xff >>> bits) << bits;
+
+    for (var y = 0; y < minh; y++) {
+        var covery = y*coverdata.width;
+        var secrety = y*secretdata.width;
+        for (var x = 0; x < minw; x++) {
+            var coveridx = 4 * (covery + x);
+            var secretidx = 4 * (secrety + x);
+
+            // red
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[secretidx] >>> (8 - bits));
+
+            // green
+            ++coveridx;
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
+
+            // blue
+            ++coveridx;
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
+        }
+    }
+}
+
+function doUnhideImage(stegdata, bits) {
+    var stegpix = stegdata.data;
+
+    var w = stegdata.width;
+    var h = stegdata.height;
+
+    for (var y = 0; y < h; y++) {
+        var stegy = y*w;
+        for (var x = 0; x < w; x++) {
+            var stegidx = 4*(stegy + x);
+
+            // red
+            stegpix[stegidx] = (stegpix[stegidx] << (8 - bits)) & 0xff;
+
+            // green
+            ++stegidx;
+            stegpix[stegidx] = (stegpix[stegidx] << (8 - bits)) & 0xff;
+
+            // blue
+            ++stegidx;
+            stegpix[stegidx] = (stegpix[stegidx] << (8 - bits)) & 0xff;
+        }
+    }
+}
+
 
