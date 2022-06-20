@@ -201,7 +201,7 @@
         }, 20);
     });
 
-// DEFAULT THINGS --------------------------------------------------
+// VARIABLES --------------------------------------------------
 
 var changed = true;
 
@@ -229,11 +229,39 @@ var loaded_img = {
 var stegdataurl;
 
 
-// FUNCTIONS --------------------------------------------------
+// GENERAL FUNCTIONS --------------------------------------------------
 
-// SAM TODO AFTER LUNCH - organize comments for the functions
+// Loading images takes in 2 values
+    // which = the id name it will look for
+    // cb = the callback? to draw the image
+function loadImage(which, cb) {
+    var input = $('#' + which)[0];
 
-// this shows the uploaded images for HIDING images div
+    loaded_img[which] = undefined;
+
+    var img = new Image;
+    img.onload = function() {
+        loaded_img[which] = img;
+        cb(which);
+    }
+    img.src = URL.createObjectURL(input.files[0]);
+}
+
+function loadPresetImage(which, cb) {
+    loaded_img[which] = undefined;
+
+    var img = new Image;
+    img.onload = function() {
+        loaded_img[which] = img;
+        cb(which);
+    }
+    img.src = $('#'+which+'-preset').val() + '.png';
+}
+
+
+// HIDING IMAGES FUNCTIONS --------------------------------------------------
+
+// This function will draw the image inside of the canvas 
 function drawImagePreview(which, recursed) {
     var id = '#' + which + 'canvas';
 
@@ -268,6 +296,7 @@ function drawImagePreview(which, recursed) {
     }
 }
 
+// This will make the output image once both COVER and SECRET image are uploaded
 function makeHideImagePreview(bits) {
     $('#downloadbutton').prop('disabled', false);
     var ctx = $('#outputcanvas')[0].getContext('2d');
@@ -288,8 +317,50 @@ function makeHideImagePreview(bits) {
     }, 20);
 }
 
+// disregard - this was never called
+function hideImage() {
+    loadImage('cover', drawImagePreview);
+    loadImage('secret', drawImagePreview);
+}
 
-// this shows the uploaded images for UNHIDING images div
+// This function adjusts the bits of the output image
+function doHideImage(coverdata, secretdata, bits) {
+    var coverpix = coverdata.data;
+    var secretpix = secretdata.data;
+
+    var minw = coverdata.width;
+    var minh = coverdata.height;
+    if (secretdata.width < minw)
+        minw = secretdata.width;
+    if (secretdata.height < minh)
+        minh = secretdata.height;
+
+    var mask = (0xff >>> bits) << bits;
+
+    for (var y = 0; y < minh; y++) {
+        var covery = y*coverdata.width;
+        var secrety = y*secretdata.width;
+        for (var x = 0; x < minw; x++) {
+            var coveridx = 4 * (covery + x);
+            var secretidx = 4 * (secrety + x);
+
+            // red
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[secretidx] >>> (8 - bits));
+
+            // green
+            ++coveridx;
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
+
+            // blue
+            ++coveridx;
+            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
+        }
+    }
+}
+
+// UNHIDING IMAGES FUNCTIONS --------------------------------------------------
+
+// This function will draw the image inside of the canvas 
 function drawUnhideImagePreview() {
     var ctx = $('#stegcanvas')[0].getContext('2d');
 
@@ -306,6 +377,7 @@ function drawUnhideImagePreview() {
     makeUnhideImagePreview();
 }
 
+// This will make the output image once both COMBINED image is uploaded
 function makeUnhideImagePreview() {
     $('#downloadbutton2').prop('disabled', false);
     var ctx = $('#hiddencanvas')[0].getContext('2d');
@@ -345,70 +417,7 @@ function makeUnhideImagePreview() {
     }, 20);
 }
 
-function loadImage(which, cb) {
-    var input = $('#' + which)[0];
-
-    loaded_img[which] = undefined;
-
-    var img = new Image;
-    img.onload = function() {
-        loaded_img[which] = img;
-        cb(which);
-    }
-    img.src = URL.createObjectURL(input.files[0]);
-}
-
-function loadPresetImage(which, cb) {
-    loaded_img[which] = undefined;
-
-    var img = new Image;
-    img.onload = function() {
-        loaded_img[which] = img;
-        cb(which);
-    }
-    img.src = $('#'+which+'-preset').val() + '.png';
-}
-
-function hideImage() {
-    loadImage('cover', drawImagePreview);
-    loadImage('secret', drawImagePreview);
-}
-
-// hides secretdata into coverdata
-function doHideImage(coverdata, secretdata, bits) {
-    var coverpix = coverdata.data;
-    var secretpix = secretdata.data;
-
-    var minw = coverdata.width;
-    var minh = coverdata.height;
-    if (secretdata.width < minw)
-        minw = secretdata.width;
-    if (secretdata.height < minh)
-        minh = secretdata.height;
-
-    var mask = (0xff >>> bits) << bits;
-
-    for (var y = 0; y < minh; y++) {
-        var covery = y*coverdata.width;
-        var secrety = y*secretdata.width;
-        for (var x = 0; x < minw; x++) {
-            var coveridx = 4 * (covery + x);
-            var secretidx = 4 * (secrety + x);
-
-            // red
-            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[secretidx] >>> (8 - bits));
-
-            // green
-            ++coveridx;
-            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
-
-            // blue
-            ++coveridx;
-            coverpix[coveridx] = (coverpix[coveridx] & mask) + (secretpix[++secretidx] >>> (8 - bits));
-        }
-    }
-}
-
+// This function adjusts the bits of the output image
 function doUnhideImage(stegdata, bits) {
     var stegpix = stegdata.data;
 
