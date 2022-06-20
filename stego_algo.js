@@ -1,191 +1,215 @@
-// THE PLAN (erase comments before submitting)
-// [X] SAM = 1 - 84
-// [] CHO = 86 - 167
-// [] DARREN = 169 - 255
-// [] JOSHUA = 257 - 383
-
-
-/*
-    tasks
-    [] 1. get algo from existing git (each person will commit 1/4 of the code)
-    [] 2. set up html from scratch
-    [] 3. change names of stuff from js & connect it w html
-    [] 4. deploy and it should be working??
-*/
-
 // Basis of Algorithm: https://github.com/jes/hideimage/blob/master/hideimage.js
 
-// SAM
-$('#cover').change(function(e) {
-    changed = true;
-    loadImage('cover', drawImagePreview);
-    $('#cover-preset').val('na');
-});
+// HIDING IMAGES --------------------------------------------------
 
-$('#cover-preset').change(function(e) {
-    changed = true;
-    loadPresetImage('cover', drawImagePreview);
-});
-
-$('#secret').change(function(e) {
-    changed = true;
-    loadImage('secret', drawImagePreview);
-});
-
-$('#secret-preset').change(function(e) {
-    changed = true;
-    loadPresetImage('secret', drawImagePreview);
-});
-
-$('#bits').slider({
-    min: 1,
-    max: 7,
-    slide: function(e, ui) {
-        $('#bitsdisplay').text(ui.value);
-        changed = true;
-        if (loaded_img["cover"] && loaded_img["secret"])
-            makeHideImagePreview(ui.value);
-    },
-});
-
-$('#stegimage').change(function(e) {
-    changed = true;
-    loadImage('stegimage', drawUnhideImagePreview);
-});
-
-$('#stegimage-preset').change(function(e) {
-    changed = true;
-    loadPresetImage('stegimage', drawUnhideImagePreview);
-});
-
-$('#bits2').slider({
-    min: 1,
-    max: 7,
-    slide: function(e, ui) {
-        $('#unhidebitsdisplay').text(ui.value + " (release to process)");
-    },
-    change: function(e, ui) {
-        $('#unhidebitsdisplay').text(ui.value);
-        $('#unhidethrob').show();
-        setTimeout(function() {
-            changed = true;
-            if (loaded_img["stegimage"])
-                makeUnhideImagePreview(ui.value);
-        }, 20);
-    },
-});
-
-$('#unhiderow').hide();
-
-$('#hide-switch').click(hide_switch);
-$('#unhide-switch').click(unhide_switch);
-
-function hide_switch() {
-    $('#hiderow').show();
+// Step 0 - Loading the Hiding Images Div
+    // by default, the hiding images section is the home page.
+    // so the unhiding images div is hidden
     $('#unhiderow').hide();
-    $('#hide-switch').addClass('btn-primary');
-    $('#hide-switch').removeClass('btn-default');
-    $('#unhide-switch').addClass('btn-default');
-    $('#unhide-switch').removeClass('btn-primary');
-    if (window.location.hash)
-        window.location.hash = '';
-}
 
-function unhide_switch() {
-    $('#unhiderow').show();
-    $('#hiderow').hide();
-    $('#unhide-switch').addClass('btn-primary');
-    $('#unhide-switch').removeClass('btn-default');
-    $('#hide-switch').addClass('btn-default');
-    $('#hide-switch').removeClass('btn-primary');
-    window.location.hash = 'unhide';
-}
+    // If the hide image button is clicked, then it will show the div
+    $('#hide-switch').click(hide_switch);
 
-// CHO = 86 - 167
-if (window.location.hash == '#unhide')
+    function hide_switch() {
+        $('#hiderow').show();
+        $('#unhiderow').hide();
+        $('#hide-switch').addClass('btn-primary');
+        $('#hide-switch').removeClass('btn-default');
+        $('#unhide-switch').addClass('btn-default');
+        $('#unhide-switch').removeClass('btn-primary');
+        if (window.location.hash)
+            window.location.hash = '';
+    }
+
+// Step 1 - Loading the Cover Image
+
+    // You can UPLOAD your own cover image
+    $('#cover').change(function(e) {
+        changed = true;
+        loadImage('cover', drawImagePreview);
+        $('#cover-preset').val('na');
+    });
+
+    // Or you can use the PRESET cover images
+    $('#cover-preset').change(function(e) {
+        changed = true;
+        loadPresetImage('cover', drawImagePreview);
+    });
+
+// Step 2 - Loading the Secret Image
+
+    // You can UPLOAD your own secret image
+    $('#secret').change(function(e) {
+        changed = true;
+        loadImage('secret', drawImagePreview);
+    });
+
+    // Or you can use the PRESET secret images
+    $('#secret-preset').change(function(e) {
+        changed = true;
+        loadPresetImage('secret', drawImagePreview);
+    });
+
+// Step 3 - Outputting the COMBINED Image (Cover + Secret Image)
+
+    // You can adjust the number of bits being hidden
+    // more bits = easier to see the hidden image but better quality
+    // less bits = harder to see the hidden image but lower quality
+    $('#bits').slider({
+        min: 1,
+        max: 7,
+        slide: function(e, ui) {
+            $('#bitsdisplay').text(ui.value);
+            changed = true;
+            if (loaded_img["cover"] && loaded_img["secret"])
+                makeHideImagePreview(ui.value);
+        },
+    });
+
+    // by default the download button is disabled UNTIL the output image is finished
+    $('#downloadbutton').prop('disabled', true);
+
+    // if they click the download button, user will see the OUTPUT image
+    // the implementation let the user right click + save the image instead of making a button for it
+    $('#downloadbutton').click(function(e) {
+        if (!loaded_img["cover"] || !loaded_img["secret"]) {
+            return;
+        }
+
+        $('#fullimgmodal').modal('show');
+
+        if(!changed)
+            return;
+
+        $('#viewimg').hide();
+
+        $('#loadingspan').text("Processing...");
+        setTimeout(function() {
+            var cover = document.createElement('canvas');
+            var secret = document.createElement('canvas');
+
+            cover.width = loaded_img["cover"].width;
+            cover.height = loaded_img["cover"].height;
+            secret.width = loaded_img["secret"].width;
+            secret.height = loaded_img["secret"].height;
+
+            var coverctx = cover.getContext('2d');
+            var secretctx = secret.getContext('2d');
+
+            coverctx.clearRect(0, 0, cover.width, cover.height);
+            coverctx.drawImage(loaded_img["cover"], 0, 0);
+            secretctx.clearRect(0, 0, secret.width, secret.height);
+            secretctx.drawImage(loaded_img["secret"], 0, 0);
+
+            var coverdata = coverctx.getImageData(0, 0, cover.width, cover.height);
+            var secretdata = secretctx.getImageData(0, 0, secret.width, secret.height);
+            doHideImage(coverdata, secretdata, $('#bits').slider('value'));
+
+            $('#loadingspan').text("Displaying...");
+            setTimeout(function() {
+                coverctx.putImageData(coverdata, 0, 0);
+                changed = false;
+
+                $('#viewimg').attr('src', cover.toDataURL());
+                $('#viewimg').show();
+
+                $('#loadingspan').html("Right click and save the image.<br>Use the 'Unhide image' tool to retrieve the hidden image.");
+            }, 20);
+        }, 20);
+    });
+
+// UNHIDING IMAGES --------------------------------------------------
+
+// Step 0 - Loading the Unhiding Images Div
+
+    // If the unhide image button is clicked, then it will show the div & hide the current div
+    $('#unhide-switch').click(unhide_switch);
+
+    function unhide_switch() {
+        $('#unhiderow').show();
+        $('#hiderow').hide();
+        $('#unhide-switch').addClass('btn-primary');
+        $('#unhide-switch').removeClass('btn-default');
+        $('#hide-switch').addClass('btn-default');
+        $('#hide-switch').removeClass('btn-primary');
+        window.location.hash = 'unhide';
+    }
+
+    if (window.location.hash == '#unhide')
     unhide_switch();
 
-var changed = true;
+// Step 1 - Loading the COMBINED Image (aka the Steg Image)
 
-$('#downloadbutton').prop('disabled', true);
-$('#downloadbutton2').prop('disabled', true);
+    // You can UPLOAD your own steg image
+    $('#stegimage').change(function(e) {
+        changed = true;
+        loadImage('stegimage', drawUnhideImagePreview);
+    });
 
-$('#downloadbutton').click(function(e) {
-    if (!loaded_img["cover"] || !loaded_img["secret"]) {
-        return;
-    }
+    // Or you can use the PRESET steg images
+    // (our group wont use this feature so its less confusing)
+    $('#stegimage-preset').change(function(e) {
+        changed = true;
+        loadPresetImage('stegimage', drawUnhideImagePreview);
+    });
 
-    $('#fullimgmodal').modal('show');
+// Step 2 - Outputting the HIDDEN Image
 
-    if(!changed)
-        return;
+    // You can adjust the number of bits being hidden
+    $('#bits2').slider({
+        min: 1,
+        max: 7,
+        slide: function(e, ui) {
+            $('#unhidebitsdisplay').text(ui.value + " (release to process)");
+        },
+        change: function(e, ui) {
+            $('#unhidebitsdisplay').text(ui.value);
+            $('#unhidethrob').show();
+            setTimeout(function() {
+                changed = true;
+                if (loaded_img["stegimage"])
+                    makeUnhideImagePreview(ui.value);
+            }, 20);
+        },
+    });
 
-    $('#viewimg').hide();
+    // by default the download button is disabled UNTIL the output image is finished
+    $('#downloadbutton2').prop('disabled', true);
 
-    $('#loadingspan').text("Processing...");
-    setTimeout(function() {
-        var cover = document.createElement('canvas');
-        var secret = document.createElement('canvas');
-
-        cover.width = loaded_img["cover"].width;
-        cover.height = loaded_img["cover"].height;
-        secret.width = loaded_img["secret"].width;
-        secret.height = loaded_img["secret"].height;
-
-        var coverctx = cover.getContext('2d');
-        var secretctx = secret.getContext('2d');
-
-        coverctx.clearRect(0, 0, cover.width, cover.height);
-        coverctx.drawImage(loaded_img["cover"], 0, 0);
-        secretctx.clearRect(0, 0, secret.width, secret.height);
-        secretctx.drawImage(loaded_img["secret"], 0, 0);
-
-        var coverdata = coverctx.getImageData(0, 0, cover.width, cover.height);
-        var secretdata = secretctx.getImageData(0, 0, secret.width, secret.height);
-        doHideImage(coverdata, secretdata, $('#bits').slider('value'));
-
+    // if they click the download button, user will see the OUTPUT image
+    // the implementation let the user right click + save the image instead of making a button for it
+    $('#downloadbutton2').click(function(e) {
+        if (!loaded_img["stegimage"]) {
+            return;
+        }
+    
+        $('#fullimgmodal').modal('show');
+    
+        if(!changed)
+            return;
+    
+        $('#viewimg').hide();
+    
         $('#loadingspan').text("Displaying...");
         setTimeout(function() {
-            coverctx.putImageData(coverdata, 0, 0);
             changed = false;
-
-            $('#viewimg').attr('src', cover.toDataURL());
+    
+            $('#viewimg').attr('src', stegdataurl);
             $('#viewimg').show();
-
-            $('#loadingspan').html("Right click and save the image.<br>Use the 'Unhide image' tool to retrieve the hidden image.");
+    
+            $('#loadingspan').text("Right click and save the image.");
         }, 20);
-    }, 20);
-});
+    });
 
-$('#downloadbutton2').click(function(e) {
-    if (!loaded_img["stegimage"]) {
-        return;
-    }
+// DEFAULT THINGS --------------------------------------------------
 
-    $('#fullimgmodal').modal('show');
-
-    if(!changed)
-        return;
-
-    $('#viewimg').hide();
-
-    $('#loadingspan').text("Displaying...");
-    setTimeout(function() {
-        changed = false;
-
-        $('#viewimg').attr('src', stegdataurl);
-        $('#viewimg').show();
-
-        $('#loadingspan').text("Right click and save the image.");
-    }, 20);
-});
+var changed = true;
 
 function downloadCanvas(link, canvas, filename) {
     link.href = canvas.toDataURL();
     link.download=filename;
 }
 
-// DARREN = 169 - 255
 var factor = {
     "cover": 0.001,
     "secret": 0.001,
@@ -204,6 +228,12 @@ var loaded_img = {
 
 var stegdataurl;
 
+
+// FUNCTIONS --------------------------------------------------
+
+// SAM TODO AFTER LUNCH - organize comments for the functions
+
+// this shows the uploaded images for HIDING images div
 function drawImagePreview(which, recursed) {
     var id = '#' + which + 'canvas';
 
@@ -238,22 +268,6 @@ function drawImagePreview(which, recursed) {
     }
 }
 
-function drawUnhideImagePreview() {
-    var ctx = $('#stegcanvas')[0].getContext('2d');
-
-    var imgw = loaded_img["stegimage"].width;
-    var imgh = loaded_img["stegimage"].height;
-
-    var k = imgw / 300;
-    if ((imgh / 300) > k)
-        k = imgh / 300;
-
-    ctx.clearRect(0, 0, 300, 300);
-    ctx.drawImage(loaded_img["stegimage"], 0, 0, imgw / k, imgh / k);
-
-    makeUnhideImagePreview();
-}
-
 function makeHideImagePreview(bits) {
     $('#downloadbutton').prop('disabled', false);
     var ctx = $('#outputcanvas')[0].getContext('2d');
@@ -274,7 +288,23 @@ function makeHideImagePreview(bits) {
     }, 20);
 }
 
-// JOSHUA = 257 - 383
+
+// this shows the uploaded images for UNHIDING images div
+function drawUnhideImagePreview() {
+    var ctx = $('#stegcanvas')[0].getContext('2d');
+
+    var imgw = loaded_img["stegimage"].width;
+    var imgh = loaded_img["stegimage"].height;
+
+    var k = imgw / 300;
+    if ((imgh / 300) > k)
+        k = imgh / 300;
+
+    ctx.clearRect(0, 0, 300, 300);
+    ctx.drawImage(loaded_img["stegimage"], 0, 0, imgw / k, imgh / k);
+
+    makeUnhideImagePreview();
+}
 
 function makeUnhideImagePreview() {
     $('#downloadbutton2').prop('disabled', false);
