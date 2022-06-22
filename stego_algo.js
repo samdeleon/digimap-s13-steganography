@@ -296,7 +296,6 @@ function drawImagePreview(which, recursed) {
     }
 }
 
-// This will make the output image once both COVER and SECRET image are uploaded
 function makeHideImagePreview(bits) {
     $('#downloadbutton').prop('disabled', false);
     var ctx = $('#outputcanvas')[0].getContext('2d');
@@ -323,7 +322,6 @@ function hideImage() {
     loadImage('secret', drawImagePreview);
 }
 
-// This function adjusts the bits of the output image
 function doHideImage(coverdata, secretdata, bits) {
     var coverpix = coverdata.data;
     var secretpix = secretdata.data;
@@ -377,7 +375,6 @@ function drawUnhideImagePreview() {
     makeUnhideImagePreview();
 }
 
-// This will make the output image once both COMBINED image is uploaded
 function makeUnhideImagePreview() {
     $('#downloadbutton2').prop('disabled', false);
     var ctx = $('#hiddencanvas')[0].getContext('2d');
@@ -417,7 +414,6 @@ function makeUnhideImagePreview() {
     }, 20);
 }
 
-// This function adjusts the bits of the output image
 function doUnhideImage(stegdata, bits) {
     var stegpix = stegdata.data;
 
