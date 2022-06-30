@@ -5,16 +5,17 @@ const exphbs = require('express-handlebars');
 const handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { envPort, sessionKey } = require('./config');
+// const { envPort, sessionKey } = require('config.js');
 
 // EXPRESS APP
 const app = express();
-const port = envPort || 3000;
+// const port = envPort || 3000; // we'll get back to this lksjfklsdj
+const port = 3000; // LOCAL
 
 app.set('views', path.join(__dirname, 'views'));
 
 // ENGINE SET-UP
-app.engine( 'hbs', exphbs({
+app.engine( 'hbs', exphbs.engine({
     extname: 'hbs',
     defaultView: 'main',
     layoutsDir: path.join(__dirname, '/views/layouts'),
@@ -44,7 +45,7 @@ app.get('/', function(req, res) {
 });
 
 // UNHIDING IMAGES PAGE
-app.get('/unhiding-images', function(req, res) {
+app.get('/unhide', function(req, res) {
     res.render('UnhidingImages', {
     // for UnhidingImages.hbs
         tab_title: "Unhiding Images"
@@ -52,6 +53,10 @@ app.get('/unhiding-images', function(req, res) {
 });
 
 // LISTENER
-app.listen(process.env.PORT, function() {
-    console.log('App listening at port '  + process.env.PORT);
+// app.listen(process.env.PORT, function() {
+//     console.log('App listening at port '  + process.env.PORT);
+//   });
+
+app.listen(port, function() {
+    console.log('App listening at port '  + port);
   });
