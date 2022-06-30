@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const handlebars = require('handlebars');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const { envPort, sessionKey } = require('./config');
 
@@ -27,6 +28,9 @@ app.engine( 'hbs', exphbs({
 
   app.set('view engine', 'hbs');
 
+// Configuration for handling API endpoint data
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // STATIC FILES  
 app.use(express.static('public'));
