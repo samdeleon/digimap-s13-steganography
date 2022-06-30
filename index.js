@@ -33,7 +33,7 @@ app.use(express.static('public'));
 
 // HOMEPAGE = HIDING IMAGES PAGE
 app.get('/', function(req, res) {
-    res.render('index', {
+    res.render('HidingImages', {
     // for HidingImages.hbs
         tab_title: "Hiding Images"
     });
@@ -41,7 +41,7 @@ app.get('/', function(req, res) {
 
 // UNHIDING IMAGES PAGE
 app.get('/unhiding-images', function(req, res) {
-    res.render('index', {
+    res.render('UnhidingImages', {
     // for UnhidingImages.hbs
         tab_title: "Unhiding Images"
     });
