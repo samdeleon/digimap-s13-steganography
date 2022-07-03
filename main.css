@@ -2,5 +2,19 @@
 }
 
 .stego-body {
-    /* margin: 25px; */
+    margin: 15px;
+    padding-top: 25px;
+}
+
+.hidden-bits-number {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.hidden-bits-div {
+    padding-bottom: 25px;
+}
+
+.download-btn {
+    padding-top: 25px;
 }
