@@ -1,4 +1,5 @@
 <!doctype html>
+<html lang="en">
 <html>
     <head>
         <!-- BOOTSTRAP 5.2 HEAD -->
@@ -47,14 +48,14 @@
                             <h4>Step 1.</h4>
                             <p>This is the <b>stego image</b>.</p>
     
-                            <div class="button-divs">
-                                <button id="unhide-btn-img" type="button" class="btn btn-outline-secondary upload-buttons">Upload Image</button>
+                            <div>
+                                <input class="form-control form-control-sm" type="file" id="stegimage">
                             </div>
                         </div>
                         
-                        <!-- CANVAS FOR COVER IMAGE -->
+                        <!-- CANVAS FOR STEGO IMAGE -->
                         <div class="canvas-div">
-                            <canvas id="stegocanvas" class="canvas-box"></canvas>
+                            <canvas id="stegcanvas" class="canvas-box"></canvas>
                         </div>
                         
                     </div>
@@ -67,20 +68,20 @@
                             <p>This image contains the <b>output.</b> <br>You can adjust the number of hidden bits below:</p>
 
                             <div class="d-flex hidden-bits-div justify-content-center align-items-center">
-                                <button type="button" class="btn btn-secondary">-</button>
-                                <span id="unhide-hidden-bits" class="hidden-bits-number align-middle"><b>1</b></span>
-                                <button type="button" class="btn btn-secondary">+</button>
+                                <button id="unhide-minus-bits" type="button" class="btn btn-secondary">-</button>
+                                <span id="unhidebitsdisplay" class="hidden-bits-number align-middle"><b>1</b></span>
+                                <button id="unhide-add-bits" type="button" class="btn btn-secondary">+</button>
                             </div>
                             
                         </div>
                         
-                        <!-- CANVAS FOR SECRET IMAGE -->
+                        <!-- CANVAS FOR HIDDEN IMAGE -->
                         <div class="canvas-div">
-                            <canvas id="unhidecanvas" class="canvas-box"></canvas>
+                            <canvas id="hiddencanvas" class="canvas-box"></canvas>
                         </div>
 
                         <div class="download-div">
-                            <button id="unhide-download-btn" type="button" class="btn btn-outline-success">Download Image</button>
+                            <button id="downloadbutton2" type="button" class="btn btn-outline-success">Download Image</button>
                         </div>
                         
                     </div>
