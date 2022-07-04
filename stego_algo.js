@@ -57,7 +57,7 @@
 
             changed = true;
             if (loaded_img["cover"] && loaded_img["secret"])
-                makeUnideImagePreview(bits_added);
+                makeHideImagePreview(bits_added);
         }
 
         console.log("HIDING IMAGES - MINUS BUTTON - " + bits_added)
@@ -155,19 +155,6 @@ function loadImage(which, cb) {
     }
     img.src = URL.createObjectURL(input.files[0]);
 }
-
-// NOT NEEDED
-// function loadPresetImage(which, cb) { 
-//     loaded_img[which] = undefined;
-
-//     var img = new Image;
-//     img.onload = function() {
-//         loaded_img[which] = img;
-//         cb(which);
-//     }
-//     img.src = $('#'+which+'-preset').val() + '.png';
-// }
-
 
 // HIDING IMAGES FUNCTIONS --------------------------------------------------
 
