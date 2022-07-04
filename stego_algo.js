@@ -316,7 +316,7 @@ function makeHideImagePreview(bits) {
     }, 20);
 }
 
-// disregard - this was never called
+// this is in the onload for the body tag in the html
 function hideImage() {
     loadImage('cover', drawImagePreview);
     loadImage('secret', drawImagePreview);
