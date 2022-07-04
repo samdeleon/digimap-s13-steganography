@@ -46,8 +46,8 @@
                             <h4>Step 1.</h4>
                             <p>This is the <b>cover image</b> which you will see.</p>
     
-                            <div class="button-divs">
-                                <button id="hide-btn-img1" type="button" class="btn btn-outline-secondary upload-buttons">Upload Image</button>
+                            <div>
+                                <input class="form-control form-control-sm" type="file" id="cover">
                             </div>
                         </div>
                         
@@ -65,8 +65,8 @@
                             <h4>Step 2.</h4>
                             <p>This is the <b>secret image</b> which you will conceal.</p>
     
-                            <div class="button-divs">
-                                <button id="hide-btn-img2" type="button" class="btn btn-outline-secondary">Upload Image</button>
+                            <div>
+                                <input class="form-control form-control-sm" type="file" id="secret">
                             </div>
                         </div>
                         
@@ -85,20 +85,20 @@
                             <p>This image contains the <b>output.</b> <br>You can adjust the number of hidden bits below:</p>
 
                             <div class="d-flex hidden-bits-div justify-content-center align-items-center">
-                                <button type="button" class="btn btn-secondary">-</button>
-                                <span id="hide-hidden-bits" class="hidden-bits-number align-middle"><b>1</b></span>
-                                <button type="button" class="btn btn-secondary">+</button>
+                                <button id="hide-minus-bits" type="button" class="btn btn-secondary">-</button>
+                                <span id="bitsdisplay" class="hidden-bits-number align-middle"><b>1</b></span>
+                                <button id="hide-add-bits" type="button" class="btn btn-secondary">+</button>
                             </div>
                             
                         </div>
                         
-                        <!-- CANVAS FOR SECRET IMAGE -->
+                                <!-- CANVAS FOR OUTPUT IMAGE -->
                         <div class="canvas-div">
-                            <canvas id="secretcanvas" class="canvas-box"></canvas>
+                            <canvas id="outputcanvas" class="canvas-box"></canvas>
                         </div>
 
                         <div class="download-div">
-                            <button id="hide-download-btn" type="button" class="btn btn-outline-success">Download Image</button>
+                            <button id="downloadbutton" type="button" class="btn btn-outline-success">Download Image</button>
                         </div>
                         
                     </div>
@@ -112,8 +112,8 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 
-        <!-- SCRIPTS FILE -->
-        <script src="stego_algo.js"></script>
+         <!-- SCRIPTS FILE -->
+         <script type="text/javascript" src="stego_algo.js"></script>
     </body>
 
 </html>
