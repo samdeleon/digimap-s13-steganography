@@ -57,7 +57,7 @@
 
             changed = true;
             if (loaded_img["cover"] && loaded_img["secret"])
-                makeHideImagePreview(bits_added);
+                makeUnideImagePreview(bits_added);
         }
 
         console.log("HIDING IMAGES - MINUS BUTTON - " + bits_added)
@@ -75,24 +75,44 @@
 
 // Step 2 - Outputting the HIDDEN Image
 
-    // You can adjust the number of bits being hidden
-    // slider was not used in our implementation
-    // $('#bits2').slider({
-    //     min: 1,
-    //     max: 7,
-    //     slide: function(e, ui) {
-    //         $('#unhidebitsdisplay').text(ui.value + " (release to process)");
-    //     },
-    //     change: function(e, ui) {
-    //         $('#unhidebitsdisplay').text(ui.value);
-    //         $('#unhidethrob').show();
-    //         setTimeout(function() {
-    //             changed = true;
-    //             if (loaded_img["stegimage"])
-    //                 makeUnhideImagePreview(ui.value);
-    //         }, 20);
-    //     },
-    // });
+$('#unhide-minus-bits').click(function(){
+    var bits_text = $('#unhidebitsdisplay').text();
+    var bits_num = parseInt(bits_text);
+
+    var bits_minused = bits_num - 1;
+
+    if(bits_minused > 0) {
+        $('#unhidebitsdisplay').empty()
+
+        $('#unhidebitsdisplay').html("<b>"+bits_minused.toString()+"</b>");
+
+        changed = true;
+        if (loaded_img["stegimage"])
+            makeUnhideImagePreview(bits_minused);
+    }
+
+    console.log("HIDING IMAGES - MINUS BUTTON - " + bits_minused)
+
+});
+
+$('#unhide-add-bits').click(function(){
+    var bits_text = $('#unhidebitsdisplay').text();
+    var bits_num = parseInt(bits_text);
+
+    var bits_added = bits_num + 1;
+
+    if(bits_added < 8) {
+        $('#unhidebitsdisplay').empty()
+
+        $('#unhidebitsdisplay').html("<b>"+bits_added.toString()+"</b>");
+
+        changed = true;
+        if (loaded_img["stegimage"])
+            makeUnhideImagePreview(bits_added);
+    }
+
+    console.log("HIDING IMAGES - MINUS BUTTON - " + bits_added)
+});
 
 
 // VARIABLES --------------------------------------------------
