@@ -26,6 +26,7 @@
 .hidden-bits-number {
     padding-left: 25px;
     padding-right: 25px;
+    font-size: 20px;
 }
 
 upload-buttons{
@@ -45,8 +46,4 @@ upload-buttons{
     border: solid 1px black;
     width: 300px;
     height: 300px;
-}
-
-.hidden-bits-number{
-    font-size: 20px;
 }
