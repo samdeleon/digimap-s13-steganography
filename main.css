@@ -6,15 +6,47 @@
     padding-top: 25px;
 }
 
+.inside-col {
+    display: inline-block;
+    margin-bottom: 50px;
+}
+
+.step-info {
+    height: 160px;
+}
+
+.button-divs{
+    text-align: center;
+}
+
+.canvas-div {
+    text-align: center;
+}
+
 .hidden-bits-number {
     padding-left: 25px;
     padding-right: 25px;
 }
 
-.hidden-bits-div {
+upload-buttons{
     padding-bottom: 25px;
 }
 
-.download-btn {
+.download-div {
     padding-top: 25px;
+    text-align: center;
+}
+
+.page-header2 {
+    padding-bottom: 25px;
+}
+
+.canvas-box {
+    border: solid 1px black;
+    width: 300px;
+    height: 300px;
+}
+
+.hidden-bits-number{
+    font-size: 20px;
 }

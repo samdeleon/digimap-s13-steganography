@@ -12,12 +12,9 @@
 
         <!-- CSS FILE -->
         <link rel="stylesheet" href="main.css">
-
-        <!-- SCRIPTS FILE -->
-        <script src="stego_algo.js"></script>
     </head>
 
-    <body>
+    <body onload="hideImage()">
         <!-- NAVBAR -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary stego-nav">
             <div class="container-fluid">
@@ -40,60 +37,71 @@
 
         <!-- MAIN CONTENT-->
         <div class="row stego-body justify-content-center">
-            <br>
-            <h2>Hiding Images</h2>
-            <br>
+            <h2 class="page-header2">Hiding Images</h2>
             <div class="row justify-content-between">
                 
-                <div class="col hide-step1">
-                    <h4>Step 1.</h4>
-                    <p>This is the <b>cover image</b> which you will see.</p>
-
-                    <div class="d-flex justify-content-center hidden-bits-div">
-                        <button id="hide-btn-img1" type="button" class="btn btn-outline-secondary">Upload Image</button>
+                <div class="col">
+                    <div class="inside-col">
+                        <div class="step-info">
+                            <h4>Step 1.</h4>
+                            <p>This is the <b>cover image</b> which you will see.</p>
+    
+                            <div class="button-divs">
+                                <button id="hide-btn-img1" type="button" class="btn btn-outline-secondary upload-buttons">Upload Image</button>
+                            </div>
+                        </div>
+                        
+                        <!-- CANVAS FOR COVER IMAGE -->
+                        <div class="canvas-div">
+                            <canvas id="covercanvas" class="canvas-box"></canvas>
+                        </div>
+                        
                     </div>
+                </div>
 
-                    <div class="card">
-                    <img src="..." class="img-thumbnail" alt="...">
-
-                    <!-- TODO: they did a canvas pala to show the image
-                    heres their code, i'll update this tom:
-                    <canvas style="border: solid 1px black" width="300" height="300" id="covercanvas"></canvas>
-                    -->
-
+                <div class="col">
+                    <div class="inside-col">
+                        <div class="step-info">
+                            <h4>Step 2.</h4>
+                            <p>This is the <b>secret image</b> which you will conceal.</p>
+    
+                            <div class="button-divs">
+                                <button id="hide-btn-img2" type="button" class="btn btn-outline-secondary">Upload Image</button>
+                            </div>
+                        </div>
+                        
+                        <!-- CANVAS FOR SECRET IMAGE -->
+                        <div class="canvas-div">
+                            <canvas id="secretcanvas" class="canvas-box"></canvas>
+                        </div>
+                        
                     </div>
                 </div>
                 
-                <div class="col hide-step2">
-                    <h4>Step 2.</h4>
-                    <p>This is the <b>secret image</b> which you will conceal.</p>
-                    
-                    <div class="d-flex justify-content-center hidden-bits-div">
-                        <button id="hide-btn-img2" type="button" class="btn btn-outline-secondary">Upload Image</button>
-                    </div>
+                <div class="col">
+                    <div class="inside-col">
+                        <div class="step-info">
+                            <h4>Step 3.</h4>
+                            <p>This image contains the <b>output.</b> <br>You can adjust the number of hidden bits below:</p>
 
-                    <div class="card">
-                        <img src="..." class="img-thumbnail" alt="...">
-                    </div>  
-                </div>
-				
-				<div class="col hide-step3">
-                    <h4>Step 3.</h4>
-                    <p>This image contains the <b>output.</b> <br>You can adjust the number of hidden bits below:</p>
-                    <div class="d-flex hidden-bits-div justify-content-center align-items-center">
-                        <button type="button" class="btn btn-secondary">-</button>
-                        <span id="hide-hidden-bits" class="hidden-bits-number align-middle"><b>1</b></span>
-                        <button type="button" class="btn btn-secondary">+</button>
+                            <div class="d-flex hidden-bits-div justify-content-center align-items-center">
+                                <button type="button" class="btn btn-secondary">-</button>
+                                <span id="hide-hidden-bits" class="hidden-bits-number align-middle"><b>1</b></span>
+                                <button type="button" class="btn btn-secondary">+</button>
+                            </div>
+                            
+                        </div>
+                        
+                        <!-- CANVAS FOR SECRET IMAGE -->
+                        <div class="canvas-div">
+                            <canvas id="secretcanvas" class="canvas-box"></canvas>
+                        </div>
+
+                        <div class="download-div">
+                            <button id="hide-download-btn" type="button" class="btn btn-outline-success">Download Image</button>
+                        </div>
+                        
                     </div>
-                    
-                    <div class="card">
-                        <img src="..." class="img-thumbnail" alt="...">
-                    </div>  
-                    
-                    <div class="d-flex download-btn justify-content-center align-items-center">
-                        <button id="hide-download-btn" type="button" class="btn btn-outline-success">Download Image</button>
-                    </div>
-                    
                 </div>
 
             </div>
@@ -103,6 +111,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+
+        <!-- SCRIPTS FILE -->
+        <script src="stego_algo.js"></script>
     </body>
 
 </html>
