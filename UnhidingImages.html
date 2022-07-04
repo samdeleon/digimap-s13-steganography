@@ -37,7 +37,57 @@
         </nav>
 
         <!-- MAIN CONTENT-->
+        <div class="row stego-body justify-content-center">
+            <h2 class="page-header2">Unhiding Images</h2>
+            <div class="row justify-content-between">
+                
+                <div class="col">
+                    <div class="inside-col">
+                        <div class="step-info">
+                            <h4>Step 1.</h4>
+                            <p>This is the <b>stego image</b>.</p>
+    
+                            <div class="button-divs">
+                                <button id="unhide-btn-img" type="button" class="btn btn-outline-secondary upload-buttons">Upload Image</button>
+                            </div>
+                        </div>
+                        
+                        <!-- CANVAS FOR COVER IMAGE -->
+                        <div class="canvas-div">
+                            <canvas id="stegocanvas" class="canvas-box"></canvas>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="inside-col">
+                        <div class="step-info">
+                            <h4>Step 2.</h4>
+                            <p>This image contains the <b>output.</b> <br>You can adjust the number of hidden bits below:</p>
 
+                            <div class="d-flex hidden-bits-div justify-content-center align-items-center">
+                                <button type="button" class="btn btn-secondary">-</button>
+                                <span id="unhide-hidden-bits" class="hidden-bits-number align-middle"><b>1</b></span>
+                                <button type="button" class="btn btn-secondary">+</button>
+                            </div>
+                            
+                        </div>
+                        
+                        <!-- CANVAS FOR SECRET IMAGE -->
+                        <div class="canvas-div">
+                            <canvas id="unhidecanvas" class="canvas-box"></canvas>
+                        </div>
+
+                        <div class="download-div">
+                            <button id="unhide-download-btn" type="button" class="btn btn-outline-success">Download Image</button>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- BOOTSTRAP 5.2 BODY -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
