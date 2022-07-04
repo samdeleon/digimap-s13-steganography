@@ -23,17 +23,45 @@
     // You can adjust the number of bits being hidden
     // more bits = easier to see the hidden image but better quality
     // less bits = harder to see the hidden image but lower quality
-    // $('#bits').slider({
-    //     min: 1,
-    //     max: 7,
-    //     slide: function(e, ui) {
-    //         $('#bitsdisplay').text(ui.value);
-    //         changed = true;
-    //         if (loaded_img["cover"] && loaded_img["secret"])
-    //             makeHideImagePreview(ui.value);
-    //     },
-    // });
 
+    $('#hide-minus-bits').click(function(){
+        var bits_text = $('#bitsdisplay').text();
+        var bits_num = parseInt(bits_text);
+
+        var bits_minused = bits_num - 1;
+
+        if(bits_minused > 0) {
+            $('#bitsdisplay').empty()
+
+            $('#bitsdisplay').html("<b>"+bits_minused.toString()+"</b>");
+
+            changed = true;
+            if (loaded_img["cover"] && loaded_img["secret"])
+                makeHideImagePreview(bits_minused);
+        }
+
+        console.log("HIDING IMAGES - MINUS BUTTON - " + bits_minused)
+
+    });
+
+    $('#hide-add-bits').click(function(){
+        var bits_text = $('#bitsdisplay').text();
+        var bits_num = parseInt(bits_text);
+
+        var bits_added = bits_num + 1;
+
+        if(bits_added < 8) {
+            $('#bitsdisplay').empty()
+
+            $('#bitsdisplay').html("<b>"+bits_added.toString()+"</b>");
+
+            changed = true;
+            if (loaded_img["cover"] && loaded_img["secret"])
+                makeHideImagePreview(bits_added);
+        }
+
+        console.log("HIDING IMAGES - MINUS BUTTON - " + bits_added)
+    });
 
 // UNHIDING IMAGES --------------------------------------------------
 
