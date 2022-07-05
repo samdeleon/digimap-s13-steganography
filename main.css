@@ -44,3 +44,15 @@ upload-buttons{
 .canvas-box {
     border: solid 1px black;
 }
+
+.btn-circle.btn-sm {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.help-btn {
+    padding-left: 10px;
+}
