@@ -61,7 +61,25 @@
                             </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                Hiding images involve 2 inputs: the <b>cover image</b> and the <b>secret image</b>.
+
+                                We will be using this blue photo as the cover image. The RGB Color Model was used for our project where each pixel in a photo has RGB components: red bits, green bits, blue bits.
+
+                                <img src="1_bluephoto.png">
+
+                                The leftmost bits or the most significant bits (short for MSB) makes up most of the pixel’s color. This means that changes to the rightmost bits or the least significant bits (short for LSB) won't make that much of an effect for the overall output. This is why the LSB method uses the LSB of the cover image to hide the MSB of the secret image.
+
+                                In the example below, the hidden bits number is 1. The following are the steps that take place:<br><br>
+                                <ol>
+                                    <li>The cover image takes 7 MSB.</li>
+                                    <li>The secret image takes 1 MSB.</li>
+                                    <li>These bits are combined where the leftmost bits are the cover image’s bits, and the rightmost bits are the secret image’s bits.</li>
+                                </ol> 
+
+                                <b>REMEMBER:</b><br>
+                                More hidden bits = the image is easier to see
+                                <br>
+                                Less hidden bits = the image is harder to see
                             </div>     
                     </div>
                 </div>
