@@ -11,4 +11,5 @@
 
 ## Deployed Website
 The group deployed this project using Github Pages. The link to the website can be accessed below:
-https://samdeleon.github.io/HidingImages.html
+
+[https://samdeleon.github.io/HidingImages.html](https://samdeleon.github.io/HidingImages.html)
