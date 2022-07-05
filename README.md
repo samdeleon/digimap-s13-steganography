@@ -3,6 +3,10 @@
 ## Finalized Topic
 - Image Steganography using Least Significant Bit (LSB) Method
 
+## Brief Explanation of Project
+- Our project is a web application that allows you to hide a secret image within a cover image.
+- The secret image is hidden within the cover image by changing the least significant bits of the cover image.
+
 ## Group 10 (Shuumatsuban)
 - CHO, Seunghwan
 - DE LEON, Samantha
